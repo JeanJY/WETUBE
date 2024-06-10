@@ -11,7 +11,8 @@ const logger = morgan("dev");
 app.set("view engine", "pug");
 app.set("views", process.cwd() + "/src/views");
 app.use(logger);
-
+app.use(express.urlencoded({ extended: true }));
+// pug form을 자바스크립트로 파싱
 app.use("/", globalRouter);
 app.use("/videos", videoRouter);
 app.use("/users", userRouter);
