@@ -23,12 +23,15 @@
     "express-session": "^1.18.0",
     "mongoose": "^8.4.1",
     "morgan": "^1.10.0",
+    "node-fetch": "^2.6.1",
     "pug": "^3.0.3"
   },
   "devDependencies": {
     "@babel/core": "^7.24.5",
     "@babel/node": "^7.23.9",
     "@babel/preset-env": "^7.24.5",
-    "nodemon": "^3.1.0"
+    "@types/node": "^20.14.11",
+    "nodemon": "^3.1.0",
+    "typescript": "^5.5.3"
   }
 }
