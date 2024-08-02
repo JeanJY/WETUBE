@@ -143,14 +143,21 @@ export const getEdit = (req, res) => {
 export const postEdit = async (req, res) => {
   const {
     session: {
-      user: { _id },
+      user: { _id, avatarUrl },
     },
     body: { name, email, username, location },
+    file,
   } = req;
+
+  // 업데이트할 유저이름과 같은 디비의 유저를 가져온다.
+  // 업데이트할 이메일 이름과 같은 디비의 이메일을 가져온다.
+  // 중복된 데이터베이스 유저이름과 바꾼 유저이름과 같다면 불통, 안같으면 통과
+  // 중복된 데이터베이스 이메일과 바꾼 이메일이 같다면 불통, 안같으면 통과
 
   const updatedUser = await User.findByIdAndUpdate(
     _id,
     {
+      avatarUrl: file ? file.path : avatarUrl,
       name,
       email,
       username,
@@ -160,5 +167,43 @@ export const postEdit = async (req, res) => {
   );
   req.session.user = updatedUser;
   return res.redirect("/users/edit");
+};
+export const getChangePassword = (req, res) => {
+  if (req.session.user.socialOnly === true) {
+    return res.redirect("/");
+  }
+  return res.render("change-password", { pageTitle: "Change Password" });
+};
+export const postChangePassword = async (req, res) => {
+  const {
+    session: {
+      user: { _id },
+    },
+    body: { oldPassword, newPassword, newPassword2 },
+  } = req;
+  const user = await User.findById(_id);
+  const ok = await bcrypt.compare(oldPassword, user.password);
+  if (!ok) {
+    return res.status(400).render("change-password", {
+      pageTitle: "Change Password",
+      errorMessage: "The current password is incorrect.",
+    });
+  }
+  if (newPassword !== newPassword2) {
+    return res.status(400).render("change-password", {
+      pageTitle: "Change Password",
+      errorMessage: "New passwords don't match.",
+    });
+  }
+
+  user.password = newPassword;
+  await user.save();
+  req.session.destroy((err) => {
+    if (err) {
+      console.log("세션 파괴 중 에러 발생:", err);
+    }
+    res.clearCookie("connect.sid");
+    return res.redirect("/login");
+  });
 };
 export const see = (req, res) => res.send("See User");
