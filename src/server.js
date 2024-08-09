@@ -31,11 +31,14 @@ app.use(
 
 app.use(localsMiddleware);
 app.use("/uploads", express.static("uploads"));
+app.use("/static", express.static("assets"));
 app.use("/", rootRouter);
 app.use("/videos", videoRouter);
 app.use("/users", userRouter);
 
 export default app;
+
+//static; 브라우저에서 사람들이 볼 수 있게 함.
 
 // app.get("/", (req, res) => {
 //   return res.send("<h1>I love you.</h1>");
