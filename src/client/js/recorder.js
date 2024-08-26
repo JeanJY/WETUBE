@@ -3,8 +3,15 @@ const previewVideo = document.getElementById("preview");
 
 let stream;
 let recorder;
+let videoFile;
 
-const handleDownload = () => {};
+const handleDownload = () => {
+  const a = document.createElement("a");
+  a.href = videoFile;
+  a.download = "MyRecording.webm";
+  document.body.appendChild(a);
+  a.click();
+};
 
 const handleStopRecording = () => {
   startBtn.innerText = "Download Recording";
@@ -18,26 +25,28 @@ const handleStartRecording = () => {
   startBtn.removeEventListener("click", handleStartRecording);
   startBtn.addEventListener("click", handleStopRecording);
 
-  recorder = new MediaRecorder(stream);
-  recorder.ondataavailable = (event) => {
-    const videoFile = URL.createObjectURL(event.data);
-    previewVideo.srcObject = null;
-    previewVideo.src = videoFile;
-    previewVideo.loop = true;
-    previewVideo.play();
-  };
-  recorder.start();
-};
+  previewVideo.hidden = false; // 비디오 요소를 보이게 함
 
-const init = async () => {
-  stream = await navigator.mediaDevices.getUserMedia({
-    audio: false,
-    video: true,
-  });
-  previewVideo.srcObject = stream;
-  previewVideo.play();
-};
+  navigator.mediaDevices
+    .getUserMedia({ audio: false, video: true })
+    .then((mediaStream) => {
+      stream = mediaStream;
+      previewVideo.srcObject = stream;
+      previewVideo.play();
 
-init();
+      recorder = new MediaRecorder(stream, { mimeType: "video/webm" });
+      recorder.ondataavailable = (event) => {
+        videoFile = URL.createObjectURL(event.data);
+        previewVideo.srcObject = null;
+        previewVideo.src = videoFile;
+        previewVideo.loop = true;
+        previewVideo.play();
+      };
+      recorder.start();
+    })
+    .catch((error) => {
+      console.error("Error accessing media devices.", error);
+    });
+};
 
 startBtn.addEventListener("click", handleStartRecording);
