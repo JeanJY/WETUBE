@@ -1,6 +1,9 @@
 extends base.pug
 
 block content
+    div
+        video#preview
+        button#startBtn Start Recording
     if errorMessage 
         span=errorMessage 
     form(method="POST", enctype="multipart/form-data")
@@ -12,3 +15,6 @@ block content
         input(type="submit", value="Upload Video")
         
         //- label은 id를 활용한다고?
+
+block scripts 
+    script(src="/static/js/assets-recorder.js")
