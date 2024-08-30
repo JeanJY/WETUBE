@@ -27,9 +27,11 @@ export const postJoin = async (req, res) => {
       password,
       location,
     });
+    req.flash("success", "Account created successfully. Please log in.");
     return res.redirect("/login");
   } catch (error) {
     console.log(error);
+    req.flash("error", "Failed to create account.");
     return res.status(400).render("join", {
       pageTitle,
       errorMessage: error.message,
@@ -58,6 +60,7 @@ export const postLogin = async (req, res) => {
   }
   req.session.loggedIn = true;
   req.session.user = user;
+  req.flash("success", "Welcome back!");
   return res.redirect("/");
 };
 export const startGithubLogin = (req, res) => {
@@ -128,6 +131,7 @@ export const finishGithubLogin = async (req, res) => {
     }
     req.session.loggedIn = true;
     req.session.user = user;
+    req.flash("success", "Welcome back!");
     return res.redirect("/");
   } else {
     return res.redirect("/login");
@@ -166,6 +170,7 @@ export const postEdit = async (req, res) => {
     { new: true }
   );
   req.session.user = updatedUser;
+  req.flash("success", "Profile updated successfully.");
   return res.redirect("/users/edit");
 };
 export const getChangePassword = (req, res) => {
@@ -198,6 +203,7 @@ export const postChangePassword = async (req, res) => {
 
   user.password = newPassword;
   await user.save();
+  req.flash("info", "Password updated");
   req.session.destroy((err) => {
     if (err) {
       console.log("세션 파괴 중 에러 발생:", err);

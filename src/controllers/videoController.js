@@ -35,8 +35,11 @@ export const getEdit = async (req, res) => {
 
 export const postEdit = async (req, res) => {
   const { id } = req.params;
+  const {
+    user: { _id },
+  } = req.session;
   const { title, description, hashtags } = req.body;
-  const video = await Video.exists({ _id: id });
+  const video = await Video.findById(id);
   if (!video) {
     return res.status(404).render("404", { pageTitle: "Video not found." });
   }
@@ -48,6 +51,7 @@ export const postEdit = async (req, res) => {
     description,
     hashtags: Video.formatHashtags(hashtags),
   });
+  req.flash("success", "Changes saved successfully.");
   return res.redirect(`/videos/${id}`);
 };
 
@@ -72,6 +76,7 @@ export const postUpload = async (req, res) => {
     const user = await User.findById(_id);
     user.videos.push(newVideo._id);
     user.save();
+    req.flash("success", "Video uploaded successfully.");
     return res.redirect("/");
   } catch (error) {
     console.log(error);
@@ -99,6 +104,7 @@ export const deleteVideo = async (req, res) => {
     await User.findByIdAndUpdate(_id, {
       $pull: { videos: id },
     });
+    req.flash("info", "Video deleted successfully.");
     return res.redirect("/");
   } catch (error) {
     console.error("Error deleting video:", error);
