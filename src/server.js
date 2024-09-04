@@ -16,7 +16,7 @@ app.set("view engine", "pug");
 app.set("views", process.cwd() + "/src/views");
 app.use(logger);
 app.use(express.urlencoded({ extended: true })); // pug form을 자바스크립트로 파싱
-app.use(express.json()); // from commentSection.js 에서 보낸 string 을 자바스크립트 오브젝트로(json string) 파싱
+app.use(express.json()); // from commentSection.js 에서 보낸 string 을 다시 자바스크립트 오브젝트로 파싱
 
 console.log(
   `MONGODB_URL: ${process.env.MONGODB_URL}, COOKIE_SECRET_KEY: ${process.env.COOKIE_SECRET_KEY}`
