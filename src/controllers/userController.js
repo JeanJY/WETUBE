@@ -223,6 +223,5 @@ export const see = async (req, res) => {
   if (!user) {
     return res.status(404).render("404", { pageTitle: "User not found." });
   }
-
   return res.render("profile", { pageTitle: user.name, user });
 };

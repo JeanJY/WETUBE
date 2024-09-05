@@ -43,12 +43,6 @@ export default app;
 
 //static; 브라우저에서 사람들이 볼 수 있게 함.
 
-// const handleListening = () => console.log("server listenting on port 4000");
-// app.listen(4000, handleListening);
-
-// function handleListening () {
-//     return console.log(`server listenting on port http://localhost:${PORT}`);
-
 //
 // **** {}브라켓이 있고 return이 없으면 ; 함수로 산출값은 나오지만 반환하여 다음에 다른곳에 쓸곳은 없다. ****
 //      {}브라켓이 있고 return이 있으면 ; 함수로 산출한 값을 반환하여 다른곳으로 넘기거나 코딩줄이 여러개일때 원하는 반환값의 함수에 return을 쓰고 종료시킨다.
