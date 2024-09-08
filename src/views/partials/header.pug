@@ -19,7 +19,7 @@ header
                         if loggedInUser.socialOnly
                             span.header__emoji 😎
                         else if loggedInUser.avatarUrl
-                            img.header__avatar(src="/" + loggedInUser.avatarUrl)
+                            img.header__avatar(src=loggedInUser.avatarUrl)
                         else
                             span.header__emoji 😀
             else      

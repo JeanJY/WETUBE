@@ -2,7 +2,7 @@ extends base.pug
 
 block content
     div#videoContainer(data-id=video._id)
-        video(src="/" + video.fileUrl)
+        video(src=video.fileUrl)
         //- video(src="/" + video.fileUrl, controls)
         div#videoControls.videoControls
             div.videoControls__play
@@ -25,9 +25,12 @@ block content
     div.video__data
         p.video__title=video.title
         small.video__owner Uploaded by 
-            a(href=`/users/${video.owner._id}`)=video.owner.name
+            if video.owner
+                a(href=`/users/${video.owner._id}`)=video.owner.name
+            else
+                span Unknown
         small.video__createdAt=new Date(video.createdAt).toLocaleDateString("en-US", {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC'})
-        if String(video.owner._id) === String(loggedInUser._id)
+        if loggedInUser && video.owner && String(video.owner._id) === String(loggedInUser._id)
             div.video__buttons
                 a(href=`${video.id}/edit`).video__button
                     i.fas.fa-edit

@@ -75,11 +75,6 @@ const handleTimelineChange = (event) => {
   video.currentTime = value;
 };
 
-const handleEnded = () => {
-  const { id } = videoContainer.dataset;
-  fetch(`/api/videos/${id}/view`, { method: "POST" });
-};
-
 const handleFullScreenClick = () => {
   const fullScreen = document.fullscreenElement;
   if (fullScreen) {
@@ -126,6 +121,11 @@ const handleKeydown = (event) => {
   if (event.code === "ArrowLeft") {
     video.currentTime = Math.max(0, video.currentTime - 5);
   }
+};
+
+const handleEnded = () => {
+  const { id } = videoContainer.dataset;
+  fetch(`/api/videos/${id}/view`, { method: "POST" });
 };
 
 playBtn.addEventListener("click", handlePlayClick);

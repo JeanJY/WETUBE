@@ -4,6 +4,8 @@ const path = require("path");
 const BASE_JS = "./src/client/js/";
 
 module.exports = {
+  devtool: "source-map",
+
   entry: {
     main: BASE_JS + "main.js",
     videoPlayer: BASE_JS + "videoPlayer.js",
