@@ -63,6 +63,18 @@ const handleLoadedMetadata = () => {
   timeline.max = Math.floor(video.duration);
 };
 
+const handleCanPlay = () => {
+  totalTime.innerText = formatTime(Math.floor(video.duration));
+  timeline.max = Math.floor(video.duration);
+};
+
+if (video.readyState >= 1) {
+  handleLoadedMetadata();
+} else {
+  video.addEventListener("loadedmetadata", handleLoadedMetadata);
+  video.addEventListener("canplay", handleCanPlay);
+}
+
 const handleTimeUpdate = () => {
   currentTime.innerText = formatTime(Math.floor(video.currentTime));
   timeline.value = Math.floor(video.currentTime);
@@ -128,6 +140,7 @@ const handleEnded = () => {
   fetch(`/api/videos/${id}/view`, { method: "POST" });
 };
 
+video.addEventListener("canplay", handleCanPlay);
 playBtn.addEventListener("click", handlePlayClick);
 muteBtn.addEventListener("click", handleMute);
 volumeRange.addEventListener("input", handleVolumeChange);
